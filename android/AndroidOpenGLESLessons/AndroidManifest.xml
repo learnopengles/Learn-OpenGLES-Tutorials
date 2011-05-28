@@ -9,7 +9,7 @@
      	android:icon="@drawable/icon" 
      	android:label="@string/app_name">
         <activity 
-        	android:label="@string/app_name" 
+        	android:label="@string/lesson_one" 
         	android:name=".lesson1.LessonOneActivity">
             <intent-filter>
                 <action 
