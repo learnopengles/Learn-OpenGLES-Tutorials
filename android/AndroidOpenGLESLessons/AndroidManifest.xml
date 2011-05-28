@@ -3,7 +3,8 @@
       android:versionCode="1"
       android:versionName="1.0" 
       package="com.learnopengles.android">
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk 
+    	android:minSdkVersion="7" />
 
     <application 
      	android:icon="@drawable/icon" 
