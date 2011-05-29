@@ -73,6 +73,8 @@ public class LessonOneRenderer implements GLSurfaceView.Renderer
 	 */
 	public LessonOneRenderer()
 	{	
+		// Define points for equilateral triangles.
+		
 		// This triangle is red, green, and blue.
 		final float[] triangle1VerticesData = {
 				// X, Y, Z, 
@@ -128,7 +130,7 @@ public class LessonOneRenderer implements GLSurfaceView.Renderer
 	@Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) 
 	{
-		// Set the background clear color to black.
+		// Set the background clear color to gray.
 		GLES20.glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
 	
 		// Position the eye behind the origin.
