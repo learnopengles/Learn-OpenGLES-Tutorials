@@ -15,6 +15,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter;
 
 import com.learnopengles.android.lesson1.LessonOneActivity;
+import com.learnopengles.android.lesson2.LessonTwoActivity;
 
 public class TableOfContents extends ListActivity 
 {
@@ -50,6 +51,7 @@ public class TableOfContents extends ListActivity
 			item.put(ITEM_TITLE, getText(R.string.lesson_two));
 			item.put(ITEM_SUBTITLE, getText(R.string.lesson_two_subtitle));
 			data.add(item);
+			activityMapping.put(i++, LessonTwoActivity.class);
 		}
 		
 		final SimpleAdapter dataAdapter = new SimpleAdapter(this, data, R.layout.toc_item, new String[] {ITEM_IMAGE, ITEM_TITLE, ITEM_SUBTITLE}, new int[] {R.id.Image, R.id.Title, R.id.SubTitle});
