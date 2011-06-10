@@ -92,10 +92,7 @@ public class LessonTwoRenderer implements GLSurfaceView.Renderer
 	
 	/** This is a handle to our per-vertex cube shading program. */
 	private int mPerVertexProgramHandle;
-	
-	/** This is a handle to our per-pixel cube shading program. */
-	private int mPerPixelProgramHandle;
-
+		
 	/** This is a handle to our light point program. */
 	private int mPointProgramHandle;	
 						
@@ -284,6 +281,60 @@ public class LessonTwoRenderer implements GLSurfaceView.Renderer
 		mCubeNormals.put(cubeNormalData).position(0);
 	}
 	
+	protected String getVertexShader()
+	{
+		// TODO: Explain why we normalize the vectors, explain some of the vector math behind it all. Explain what is eye space.
+		final String vertexShader =
+			"uniform mat4 u_MVPMatrix;      \n"		// A constant representing the combined model/view/projection matrix.
+		  + "uniform mat4 u_MVMatrix;       \n"		// A constant representing the combined model/view matrix.	
+		  + "uniform vec3 u_LightPos;       \n"	    // The position of the light in eye space.
+			
+		  + "attribute vec4 a_Position;     \n"		// Per-vertex position information we will pass in.
+		  + "attribute vec4 a_Color;        \n"		// Per-vertex color information we will pass in.
+		  + "attribute vec3 a_Normal;       \n"		// Per-vertex normal information we will pass in.
+		  
+		  + "varying vec4 v_Color;          \n"		// This will be passed into the fragment shader.
+		  
+		  + "void main()                    \n" 	// The entry point for our vertex shader.
+		  + "{                              \n"		
+		// Transform the vertex into eye space.
+		  + "   vec3 modelViewVertex = vec3(u_MVMatrix * a_Position);              \n"
+		// Transform the normal's orientation into eye space.
+		  + "   vec3 modelViewNormal = vec3(u_MVMatrix * vec4(a_Normal, 0.0));     \n"
+		// Will be used for attenuation.
+		  + "   float distance = length(u_LightPos - modelViewVertex);             \n"
+		// Get a lighting direction vector from the light to the vertex.
+		  + "   vec3 lightVector = normalize(u_LightPos - modelViewVertex);        \n"
+		// Calculate the dot product of the light vector and vertex normal. If the normal and light vector are
+		// pointing in the same direction then it will get max illumination.
+		  + "   float diffuse = max(dot(modelViewNormal, lightVector), 0.1);       \n" 	  		  													  
+		// Attenuate the light based on distance.
+		  + "   diffuse = diffuse * (1.0 / (1.0 + (0.25 * distance * distance)));  \n"
+		// Multiply the color by the illumination level. It will be interpolated across the triangle.
+		  + "   v_Color = a_Color * diffuse;                                       \n" 	 
+		// gl_Position is a special variable used to store the final position.
+		// Multiply the vertex by the matrix to get the final point in normalized screen coordinates.		
+		  + "   gl_Position = u_MVPMatrix * a_Position;                            \n"     
+		  + "}                                                                     \n"; 
+		
+		return vertexShader;
+	}
+	
+	protected String getFragmentShader()
+	{
+		final String fragmentShader =
+			"precision mediump float;       \n"		// Set the default precision to medium. We don't need as high of a 
+													// precision in the fragment shader.				
+		  + "varying vec4 v_Color;          \n"		// This is the color from the vertex shader interpolated across the 
+		  											// triangle per fragment.			  
+		  + "void main()                    \n"		// The entry point for our fragment shader.
+		  + "{                              \n"
+		  + "   gl_FragColor = v_Color;     \n"		// Pass the color directly through the pipeline.		  
+		  + "}                              \n";
+		
+		return fragmentShader;
+	}
+	
 	@Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) 
 	{
@@ -316,120 +367,14 @@ public class LessonTwoRenderer implements GLSurfaceView.Renderer
 		// view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
 		Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);		
 
-		// TODO: Explain why we normalize the vectors, explain some of the vector math behind it all. Explain what is eye space.
-		final String vertexShader =
-			"uniform mat4 u_MVPMatrix;      \n"		// A constant representing the combined model/view/projection matrix.
-		  + "uniform mat4 u_MVMatrix;       \n"		// A constant representing the combined model/view matrix.	
-		  + "uniform vec3 u_LightPos;       \n"	    // The position of the light in eye space.
-			
-		  + "attribute vec4 a_Position;     \n"		// Per-vertex position information we will pass in.
-		  + "attribute vec4 a_Color;        \n"		// Per-vertex color information we will pass in.
-		  + "attribute vec3 a_Normal;       \n"		// Per-vertex normal information we will pass in.
-		  
-		  + "varying vec4 v_Color;          \n"		// This will be passed into the fragment shader.
-		  
-		  + "void main()                    \n" 	// The entry point for our vertex shader.
-		  + "{                              \n"		  
-		  + "   vec3 modelViewVertex = vec3(\n" 	// Transform the vertex into eye space. 
-		  + "      u_MVMatrix * a_Position);\n" 
-		  + "   vec3 modelViewNormal = vec3(\n" 	// Transform the normal's orientation into eye space.
-		  + "      u_MVMatrix               \n"
-		  + "      * vec4(a_Normal, 0.0));  \n"
-		  + "   float distance =            \n"		// Will be used for attenuation.
-		  + "   length                      \n" 
-		  + "   (u_LightPos                 \n" 
-		  + "    - modelViewVertex);        \n"
-		  + "   vec3 lightVector = normalize\n" 	// Get a lighting direction vector from the light to the vertex.
-		  + "   (u_LightPos                 \n" 
-		  + "    - modelViewVertex);        \n" 				  
-		  + "   float diffuse =             \n" 	// Calculate the dot product of the light vector and
-		  + "   max(dot(modelViewNormal,    \n" 	// vertex normal. If the normal and light vector are
-		  + "       lightVector), 0.1);     \n" 	// pointing in the same direction then it will get max 		  													  
-												    // illumination.
-		  + "   diffuse = diffuse *         \n"		// Add attenuation.
-		  + "   (1.0 / (1.0 +               \n" 
-		  + "(0.25 * distance * distance)));\n"
-		  + "   v_Color = a_Color * diffuse;\n" 	// Multiply the color by the illumination level. 
-										            // It will be interpolated across the triangle.
-		  + "   gl_Position = u_MVPMatrix   \n" 	// gl_Position is a special variable used to store the final position.
-		  + "               * a_Position;   \n"     // Multiply the vertex by the matrix to get the final point in
-		  											// normalized screen coordinates.		  
-		  + "}                              \n";    
-		
-		final String fragmentShader =
-			"precision mediump float;       \n"		// Set the default precision to medium. We don't need as high of a 
-													// precision in the fragment shader.				
-		  + "varying vec4 v_Color;          \n"		// This is the color from the vertex shader interpolated across the 
-		  											// triangle per fragment.			  
-		  + "void main()                    \n"		// The entry point for our fragment shader.
-		  + "{                              \n"
-		  + "   gl_FragColor = v_Color;     \n"		// Pass the color directly through the pipeline.		  
-		  + "}                              \n";												
+		final String vertexShader = getVertexShader();   		
+ 		final String fragmentShader = getFragmentShader();			
 		
 		final int vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader);		
 		final int fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);		
 		
 		mPerVertexProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle, 
-				new String[] {"a_Position",  "a_Color", "a_Normal"});								                
-        
-        // Define our per-pixel lighting shader.
-        final String perPixelVertexShader =
-			"uniform mat4 u_MVPMatrix;      \n"		// A constant representing the combined model/view/projection matrix.
-		  + "uniform mat4 u_MVMatrix;       \n"		// A constant representing the combined model/view matrix.			  
-			
-		  + "attribute vec4 a_Position;     \n"		// Per-vertex position information we will pass in.
-		  + "attribute vec4 a_Color;        \n"		// Per-vertex color information we will pass in.
-		  + "attribute vec3 a_Normal;       \n"		// Per-vertex normal information we will pass in.
-		  
-		  + "varying vec3 v_Position;       \n"		// This will be passed into the fragment shader.
-		  + "varying vec4 v_Color;          \n"		// This will be passed into the fragment shader.
-		  + "varying vec3 v_Normal;         \n"		// This will be passed into the fragment shader.
-		  
-		  + "void main()                    \n" 	// The entry point for our vertex shader.
-		  + "{                              \n"
-		  + "   v_Position = vec3(u_MVMatrix\n" 	// Transform the vertex into eye space. 
-		  + "       * a_Position);          \n" 
-		  + "   v_Color = a_Color;          \n" 	// Pass through the color. 
-		  + "   v_Normal = vec3(u_MVMatrix  \n" 	// Transform the normal's orientation into eye space.
-		  + "       * vec4(a_Normal, 0.0)); \n"		  		  
-		  + "   gl_Position = u_MVPMatrix   \n" 	// gl_Position is a special variable used to store the final position.
-		  + "               * a_Position;   \n"     // Multiply the vertex by the matrix to get the final point in
-		  											// normalized screen coordinates.		  
-		  + "}                              \n";    
-		
-		final String perPixelFragmentShader =
-			"precision mediump float;       \n"		// Set the default precision to medium. We don't need as high of a 
-													// precision in the fragment shader.
-		  + "uniform vec3 u_LightPos;       \n"	    // The position of the light in eye space.
-		  
-		  + "varying vec3 v_Position;		\n"		// Interpolated position for this fragment.	
-		  + "varying vec4 v_Color;          \n"		// This is the color from the vertex shader interpolated across the 
-		  											// triangle per fragment.
-		  + "varying vec3 v_Normal;         \n"		// Interpolated normal for this fragment.
-		  
-		  + "void main()                    \n"		// The entry point for our fragment shader.
-		  + "{                              \n"
-		  + "   float distance =            \n"		// Will be used for attenuation.
-		  + "   length                      \n" 
-		  + "   (u_LightPos - v_Position);  \n"
-		  + "   vec3 lightVector = normalize\n"     // Get a lighting direction vector from the light to the vertex.
-		  + "   (u_LightPos - v_Position);  \n" 				  
-		  + "   float diffuse =             \n" 	// Calculate the dot product of the light vector and
-		  + "   max(dot(v_Normal,           \n" 	// vertex normal. If the normal and light vector are
-		  + "       lightVector), 0.1);     \n" 	// pointing in the same direction then it will get max 		  													  
-		  											// illumination.		  
-		  + "   diffuse = diffuse *         \n"		// Add attenuation.
-		  + "   (1.0 / (1.0 +               \n" 
-		  + "(0.25 * distance * distance)));\n"
-		  + "   gl_FragColor = v_Color      \n" 	// Multiply the color by the diffuse illumination level to 
-		  + "                * diffuse;     \n"		// get final output color.	  
-		  + "}                              \n";	
-		
-		final int perPixelVertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, perPixelVertexShader);		
-		final int perPixelFragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, perPixelFragmentShader);		
-		
-		mPerPixelProgramHandle = createAndLinkProgram(perPixelVertexShaderHandle, perPixelFragmentShaderHandle, 
-				new String[] {"a_Position",  "a_Color", "a_Normal"});								        
+				new String[] {"a_Position",  "a_Color", "a_Normal"});								                                							       
         
         // Define a simple shader program for our point.
         final String pointVertexShader =
@@ -481,33 +426,19 @@ public class LessonTwoRenderer implements GLSurfaceView.Renderer
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);			        
                 
         // Do a complete rotation every 10 seconds.
-        long time = SystemClock.uptimeMillis() % 10000L;
-        long timeForProgram = SystemClock.uptimeMillis() % 20000L;
-        float angleInDegrees = (360.0f / 10000.0f) * ((int) time);
+        long time = SystemClock.uptimeMillis() % 10000L;        
+        float angleInDegrees = (360.0f / 10000.0f) * ((int) time);                
         
-        final int programHandle;
-        
-        // Switch programs every 10 seconds.
-        if (timeForProgram < 10000)
-        {
-            // Set our per-vertex lighting program.
-        	programHandle = mPerVertexProgramHandle;        	
-        }
-        else
-        {
-            // Set our per-pixel lighting program.
-        	programHandle = mPerPixelProgramHandle;
-        }
-        
-        GLES20.glUseProgram(programHandle);
+        // Set our per-vertex lighting program.
+        GLES20.glUseProgram(mPerVertexProgramHandle);
         
         // Set program handles for cube drawing.
-        mMVPMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVPMatrix");
-        mMVMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVMatrix"); 
-        mLightPosHandle = GLES20.glGetUniformLocation(programHandle, "u_LightPos");
-        mPositionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
-        mColorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
-        mNormalHandle = GLES20.glGetAttribLocation(programHandle, "a_Normal"); 
+        mMVPMatrixHandle = GLES20.glGetUniformLocation(mPerVertexProgramHandle, "u_MVPMatrix");
+        mMVMatrixHandle = GLES20.glGetUniformLocation(mPerVertexProgramHandle, "u_MVMatrix"); 
+        mLightPosHandle = GLES20.glGetUniformLocation(mPerVertexProgramHandle, "u_LightPos");
+        mPositionHandle = GLES20.glGetAttribLocation(mPerVertexProgramHandle, "a_Position");
+        mColorHandle = GLES20.glGetAttribLocation(mPerVertexProgramHandle, "a_Color");
+        mNormalHandle = GLES20.glGetAttribLocation(mPerVertexProgramHandle, "a_Normal"); 
         
         // Calculate position of the light. Rotate and then push into the distance.
         Matrix.setIdentityM(mLightModelMatrix, 0);
@@ -591,6 +522,7 @@ public class LessonTwoRenderer implements GLSurfaceView.Renderer
         // Pass in the light position in eye space.        
         GLES20.glUniform3f(mLightPosHandle, mLightPosInEyeSpace[0], mLightPosInEyeSpace[1], mLightPosInEyeSpace[2]);
         
+        // Draw the cube.
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);                               
 	}	
 	
@@ -613,6 +545,7 @@ public class LessonTwoRenderer implements GLSurfaceView.Renderer
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
 		GLES20.glUniformMatrix4fv(pointMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 		
+		// Draw the point.
 		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1);
 	}
 	
