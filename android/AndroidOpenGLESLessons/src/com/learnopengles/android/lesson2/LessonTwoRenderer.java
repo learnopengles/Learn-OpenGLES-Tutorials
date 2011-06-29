@@ -453,26 +453,26 @@ public class LessonTwoRenderer implements GLSurfaceView.Renderer
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 4.0f, 0.0f, -7.0f);
         Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 0.0f, 0.0f);        
-        drawCube(mLightPosInWorldSpace);
+        drawCube();
                         
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, -4.0f, 0.0f, -7.0f);
         Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);        
-        drawCube(mLightPosInWorldSpace);
+        drawCube();
         
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, 4.0f, -7.0f);
         Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 0.0f, 1.0f);        
-        drawCube(mLightPosInWorldSpace);
+        drawCube();
         
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, -4.0f, -7.0f);
-        drawCube(mLightPosInWorldSpace);
+        drawCube();
         
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -5.0f);
         Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 1.0f, 0.0f);        
-        drawCube(mLightPosInWorldSpace);      
+        drawCube();      
         
         // Draw a point to indicate the light.
         GLES20.glUseProgram(mPointProgramHandle);        
@@ -482,7 +482,7 @@ public class LessonTwoRenderer implements GLSurfaceView.Renderer
 	/**
 	 * Draws a cube.
 	 */			
-	private void drawCube(final float[] aLightPosInEyeSpace)
+	private void drawCube()
 	{		
 		// Pass in the position information
 		mCubePositions.position(0);		
