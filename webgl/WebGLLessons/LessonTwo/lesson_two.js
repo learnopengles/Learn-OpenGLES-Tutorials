@@ -320,31 +320,31 @@ function render(time)
     v[0] = 4; v[1] = 0; v[2] = -7;
     mat4.translate(modelMatrix, v);
     mat4.rotateX(modelMatrix, angleInRadians);            
-    drawCube(lightPosInWorldSpace);
+    drawCube();
                     
     mat4.identity(modelMatrix);
     v[0] = -4; v[1] = 0; v[2] = -7;
     mat4.translate(modelMatrix, v);
     mat4.rotateY(modelMatrix, angleInRadians);           
-    drawCube(lightPosInWorldSpace);
+    drawCube();
     
     mat4.identity(modelMatrix);
     v[0] = 0; v[1] = 4; v[2] = -7;
     mat4.translate(modelMatrix, v);    
     mat4.rotateZ(modelMatrix, angleInRadians);           
-    drawCube(lightPosInWorldSpace);
+    drawCube();
     
     mat4.identity(modelMatrix);
     v[0] = 0; v[1] = -4; v[2] = -7;
     mat4.translate(modelMatrix, v);    
-    drawCube(lightPosInWorldSpace);
+    drawCube();
     
     mat4.identity(modelMatrix);
     v[0] = 0; v[1] = 0; v[2] = -5;
     mat4.translate(modelMatrix, v);        
     v[0] = 1; v[1] = 1; v[2] = 0;
     mat4.rotate(modelMatrix, angleInRadians, v);
-    drawCube(lightPosInWorldSpace);      
+    drawCube();      
     
     // Draw a point to indicate the light.
     gl.useProgram(pointProgramHandle);        
@@ -360,7 +360,7 @@ function render(time)
 /**
  * Draws a cube.
  */			
-function drawCube(lightPosInEyeSpace)
+function drawCube()
 {		
 	// Pass in the position information
 	gl.enableVertexAttribArray(positionHandle);   
