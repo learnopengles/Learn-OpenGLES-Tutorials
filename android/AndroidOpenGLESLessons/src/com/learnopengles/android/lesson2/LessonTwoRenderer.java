@@ -338,7 +338,7 @@ public class LessonTwoRenderer implements GLSurfaceView.Renderer
 	@Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) 
 	{
-		// Set the background clear color to gray.
+		// Set the background clear color to black.
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		
 		// Use culling to remove back faces.
