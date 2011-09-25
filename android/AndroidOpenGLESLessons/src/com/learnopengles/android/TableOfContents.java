@@ -11,12 +11,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.learnopengles.android.lesson1.LessonOneActivity;
 import com.learnopengles.android.lesson2.LessonTwoActivity;
 import com.learnopengles.android.lesson3.LessonThreeActivity;
+import com.learnopengles.android.lesson4.LessonFourActivity;
 
 public class TableOfContents extends ListActivity 
 {
@@ -62,6 +63,15 @@ public class TableOfContents extends ListActivity
 			item.put(ITEM_SUBTITLE, getText(R.string.lesson_three_subtitle));
 			data.add(item);
 			activityMapping.put(i++, LessonThreeActivity.class);
+		}
+		
+		{
+			final Map<String, Object> item = new HashMap<String, Object>();
+			item.put(ITEM_IMAGE, R.drawable.ic_lesson_four);
+			item.put(ITEM_TITLE, getText(R.string.lesson_four));
+			item.put(ITEM_SUBTITLE, getText(R.string.lesson_four_subtitle));
+			data.add(item);
+			activityMapping.put(i++, LessonFourActivity.class);
 		}
 		
 		final SimpleAdapter dataAdapter = new SimpleAdapter(this, data, R.layout.toc_item, new String[] {ITEM_IMAGE, ITEM_TITLE, ITEM_SUBTITLE}, new int[] {R.id.Image, R.id.Title, R.id.SubTitle});
