@@ -99,13 +99,13 @@ public class LessonFiveRenderer implements GLSurfaceView.Renderer
 		// Points of the cube: color information
 		// R, G, B, A
 		final float[] p1c = {1.0f, 0.0f, 0.0f, 1.0f};		// red			
-		final float[] p2c = {0.0f, 1.0f, 0.0f, 1.0f};		// green
-		final float[] p3c = {0.0f, 0.0f, 1.0f, 1.0f};		// blue
-		final float[] p4c = {0.33f, 0.33f, 0.33f, 1.0f};	// dark gray
+		final float[] p2c = {1.0f, 0.0f, 1.0f, 1.0f};		// magenta
+		final float[] p3c = {0.0f, 0.0f, 0.0f, 1.0f};		// black
+		final float[] p4c = {0.0f, 0.0f, 1.0f, 1.0f};		// blue
 		final float[] p5c = {1.0f, 1.0f, 0.0f, 1.0f};		// yellow
-		final float[] p6c = {0.0f, 1.0f, 1.0f, 1.0f};		// cyan
-		final float[] p7c = {1.0f, 0.0f, 1.0f, 1.0f};		// magenta
-		final float[] p8c = {0.0f, 0.0f, 0.0f, 1.0f};		// black
+		final float[] p6c = {1.0f, 1.0f, 1.0f, 1.0f};		// white
+		final float[] p7c = {0.0f, 1.0f, 0.0f, 1.0f};		// green
+		final float[] p8c = {0.0f, 1.0f, 1.0f, 1.0f};		// cyan
 		
 		final float[] cubeColorData = ShapeBuilder.generateCubeData(p1c, p2c, p3c, p4c, p5c, p6c, p7c, p8c, p1c.length);				
 		
