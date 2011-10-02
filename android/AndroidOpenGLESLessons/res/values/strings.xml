@@ -11,5 +11,7 @@
     <string name="lesson_three_subtitle">This builds on lesson two by adding per-pixel lighting.</string>
     <string name="lesson_four">Lesson Four: Basic Texturing</string>  
     <string name="lesson_four_subtitle">This builds on lesson three by adding basic texturing.</string>
-     
+    <string name="lesson_five">Lesson Five: An Intro to Blending</string>  
+    <string name="lesson_five_subtitle">This lesson takes a look at the basics of OpenGL blending.</string>
+    <string name="lesson_five_startup_toast">Tap the screen to switch between blended and normal mode.</string> 
 </resources>
