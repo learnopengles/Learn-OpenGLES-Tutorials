@@ -13,5 +13,23 @@
     <string name="lesson_four_subtitle">This builds on lesson three by adding basic texturing.</string>
     <string name="lesson_five">Lesson Five: An Intro to Blending</string>  
     <string name="lesson_five_subtitle">This lesson takes a look at the basics of OpenGL blending.</string>
-    <string name="lesson_five_startup_toast">Tap the screen to switch between blended and normal mode.</string> 
+    <string name="lesson_five_startup_toast">Tap the screen to switch between blended and normal mode.</string>
+    <string name="lesson_six">Lesson Six: Texture Filtering Modes</string>  
+    <string name="lesson_six_subtitle">This lesson looks at the different texture filtering modes available in OpenGL ES.</string>
+    <string name="lesson_six_set_min_filter">Set min. filter</string>
+    <string name="lesson_six_set_mag_filter">Set mag. filter</string>
+    <string name="lesson_six_set_min_filter_message">Set GL_TEXTURE_MIN_FILTER</string>
+    <string name="lesson_six_set_mag_filter_message">Set GL_TEXTURE_MAG_FILTER</string>
+    <string-array name="lesson_six_min_filter_types">
+    	<item>GL_NEAREST</item>
+    	<item>GL_LINEAR</item>
+    	<item>GL_NEAREST_MIPMAP_NEAREST</item>
+    	<item>GL_NEAREST_MIPMAP_LINEAR</item>
+    	<item>GL_LINEAR_MIPMAP_NEAREST</item>
+    	<item>GL_LINEAR_MIPMAP_LINEAR</item>
+    </string-array>
+    <string-array name="lesson_six_mag_filter_types">
+    	<item>GL_NEAREST</item>
+    	<item>GL_LINEAR</item>    	
+    </string-array>
 </resources>
