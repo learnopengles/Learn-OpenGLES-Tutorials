@@ -3,14 +3,15 @@ package com.learnopengles.android.lesson6;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.FloatMath;
 import android.view.MotionEvent;
 
 public class LessonSixGLSurfaceView extends GLSurfaceView 
 {	
 	private LessonSixRenderer mRenderer;
 	
-	// Previous offsets for touch events
-	private float mPreviousX;
+	// Offsets for touch events	 
+    private float mPreviousX;
     private float mPreviousY;
     
     private float mDensity;
@@ -40,13 +41,13 @@ public class LessonSixGLSurfaceView extends GLSurfaceView
 					float deltaX = (x - mPreviousX) / mDensity;
 					float deltaY = (y - mPreviousY) / mDensity;
 					
-					mRenderer.mAngleY += deltaX;
-					mRenderer.mAngleX += deltaY;															
+					mRenderer.mDeltaX += deltaX;
+					mRenderer.mDeltaY += deltaY;												
 				}
-			}
+			}	
 			
-			mPreviousX = event.getX();
-			mPreviousY = event.getY();
+			mPreviousX = x;
+			mPreviousY = y;
 			
 			return true;
 		}

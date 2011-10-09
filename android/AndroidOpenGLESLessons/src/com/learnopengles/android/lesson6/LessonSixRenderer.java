@@ -47,6 +47,15 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 	/** Allocate storage for the final combined matrix. This will be passed into the shader program. */
 	private float[] mMVPMatrix = new float[16];
 	
+	/** Store the accumulated rotation. */
+	private final float[] mAccumulatedRotation = new float[16];
+	
+	/** Store the current rotation. */
+	private final float[] mCurrentRotation = new float[16];
+	
+	/** A temporary matrix. */
+	private float[] mTemporaryMatrix = new float[16];
+	
 	/** 
 	 * Stores a copy of the model matrix specifically for the light position.
 	 */
@@ -56,7 +65,8 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 	private final FloatBuffer mCubePositions;	
 	private final FloatBuffer mCubeNormals;
 	private final FloatBuffer mCubeTextureCoordinates;
-	
+	private final FloatBuffer mCubeTextureCoordinatesForPlane;
+		
 	/** This will be used to pass in the transformation matrix. */
 	private int mMVPMatrixHandle;
 	
@@ -106,12 +116,13 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 	/** This is a handle to our light point program. */
 	private int mPointProgramHandle;
 	
-	/** This is a handle to our texture data. */
-	private int mTextureDataHandle;
+	/** These are handles to our texture data. */
+	private int mBrickDataHandle;
+	private int mGrassDataHandle;
 	
-	/** Store angles -- publicly accessible. */
-	public volatile float mAngleX;				// Still works without volatile, but refreshes are not guaranteed to happen.
-	public volatile float mAngleY;				// Still works without volatile, but refreshes are not guaranteed to happen.
+	// These still work without volatile, but refreshes are not guaranteed to happen.					
+	public volatile float mDeltaX;					
+	public volatile float mDeltaY;						
 	
 	/**
 	 * Initialize the model data.
@@ -288,7 +299,63 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 				0.0f, 1.0f,
 				1.0f, 1.0f,
 				1.0f, 0.0f
-		};
+		};	
+		
+		// S, T (or X, Y)
+		// Texture coordinate data.
+		// Because images have a Y axis pointing downward (values increase as you move down the image) while
+		// OpenGL has a Y axis pointing upward, we adjust for that here by flipping the Y axis.
+		// What's more is that the texture coordinates are the same for every face.
+		final float[] cubeTextureCoordinateDataForPlane =
+		{												
+				// Front face
+				0.0f, 0.0f, 				
+				0.0f, 25.0f,
+				25.0f, 0.0f,
+				0.0f, 25.0f,
+				25.0f, 25.0f,
+				25.0f, 0.0f,				
+				
+				// Right face 
+				0.0f, 0.0f, 				
+				0.0f, 25.0f,
+				25.0f, 0.0f,
+				0.0f, 25.0f,
+				25.0f, 25.0f,
+				25.0f, 0.0f,	
+				
+				// Back face 
+				0.0f, 0.0f, 				
+				0.0f, 25.0f,
+				25.0f, 0.0f,
+				0.0f, 25.0f,
+				25.0f, 25.0f,
+				25.0f, 0.0f,	
+				
+				// Left face 
+				0.0f, 0.0f, 				
+				0.0f, 25.0f,
+				25.0f, 0.0f,
+				0.0f, 25.0f,
+				25.0f, 25.0f,
+				25.0f, 0.0f,	
+				
+				// Top face 
+				0.0f, 0.0f, 				
+				0.0f, 25.0f,
+				25.0f, 0.0f,
+				0.0f, 25.0f,
+				25.0f, 25.0f,
+				25.0f, 0.0f,	
+				
+				// Bottom face 
+				0.0f, 0.0f, 				
+				0.0f, 25.0f,
+				25.0f, 0.0f,
+				0.0f, 25.0f,
+				25.0f, 25.0f,
+				25.0f, 0.0f
+		};	
 		
 		// Initialize the buffers.
 		mCubePositions = ByteBuffer.allocateDirect(cubePositionData.length * mBytesPerFloat)
@@ -302,6 +369,10 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 		mCubeTextureCoordinates = ByteBuffer.allocateDirect(cubeTextureCoordinateData.length * mBytesPerFloat)
 		.order(ByteOrder.nativeOrder()).asFloatBuffer();
 		mCubeTextureCoordinates.put(cubeTextureCoordinateData).position(0);
+		
+		mCubeTextureCoordinatesForPlane = ByteBuffer.allocateDirect(cubeTextureCoordinateDataForPlane.length * mBytesPerFloat)
+		.order(ByteOrder.nativeOrder()).asFloatBuffer();
+		mCubeTextureCoordinatesForPlane.put(cubeTextureCoordinateDataForPlane).position(0);
 	}
 	
 	@Override
@@ -358,8 +429,14 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
         		new String[] {"a_Position"}); 
         
         // Load the texture
-        mTextureDataHandle = TextureHelper.loadTexture(mActivityContext, R.drawable.stone_wall_public_domain);        
+        mBrickDataHandle = TextureHelper.loadTexture(mActivityContext, R.drawable.stone_wall_public_domain);        
         GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
+        
+        mGrassDataHandle = TextureHelper.loadTexture(mActivityContext, R.drawable.noisy_grass_public_domain);
+        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
+        
+        // Initialize the accumulated rotation matrix
+        Matrix.setIdentityM(mAccumulatedRotation, 0);
 	}	
 		
 	@Override
@@ -376,7 +453,7 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 		final float bottom = -1.0f;
 		final float top = 1.0f;
 		final float near = 1.0f;
-		final float far = 10.0f;
+		final float far = 1000.0f;
 		
 		Matrix.frustumM(mProjectionMatrix, 0, left, right, bottom, top, near, far);
 	}	
@@ -387,8 +464,10 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);			        
                 
         // Do a complete rotation every 10 seconds.
-        long time = SystemClock.uptimeMillis() % 10000L;        
-        float angleInDegrees = (360.0f / 10000.0f) * ((int) time);                
+        long time = SystemClock.uptimeMillis() % 10000L;
+        long slowTime = SystemClock.uptimeMillis() % 100000L; 
+        float angleInDegrees = (360.0f / 10000.0f) * ((int) time);
+        float slowAngleInDegrees = (360.0f / 100000.0f) * ((int) slowTime); 
         
         // Set our per-vertex lighting program.
         GLES20.glUseProgram(mProgramHandle);
@@ -400,33 +479,76 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
         mTextureUniformHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture");
         mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Position");        
         mNormalHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Normal"); 
-        mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate");
+        mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate");                        
+        
+        // Calculate position of the light. Rotate and then push into the distance.
+        Matrix.setIdentityM(mLightModelMatrix, 0);
+        Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, -2.0f);      
+        Matrix.rotateM(mLightModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, 3.5f);
+               
+        Matrix.multiplyMV(mLightPosInWorldSpace, 0, mLightModelMatrix, 0, mLightPosInModelSpace, 0);
+        Matrix.multiplyMV(mLightPosInEyeSpace, 0, mViewMatrix, 0, mLightPosInWorldSpace, 0);                        
+        
+        // Draw a cube.
+        // Translate the cube into the screen.
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.8f, -3.5f);     
+        
+        // Set a matrix that contains the current rotation.
+        Matrix.setIdentityM(mCurrentRotation, 0);        
+    	Matrix.rotateM(mCurrentRotation, 0, mDeltaX, 0.0f, 1.0f, 0.0f);
+    	Matrix.rotateM(mCurrentRotation, 0, mDeltaY, 1.0f, 0.0f, 0.0f);
+    	mDeltaX = 0.0f;
+    	mDeltaY = 0.0f;
+    	
+    	// Multiply the current rotation by the accumulated rotation, and then set the accumulated rotation to the result.
+    	Matrix.multiplyMM(mTemporaryMatrix, 0, mCurrentRotation, 0, mAccumulatedRotation, 0);
+    	System.arraycopy(mTemporaryMatrix, 0, mAccumulatedRotation, 0, 16);
+    	    	
+        // Rotate the cube taking the overall rotation into account.     	
+    	Matrix.multiplyMM(mTemporaryMatrix, 0, mModelMatrix, 0, mAccumulatedRotation, 0);
+    	System.arraycopy(mTemporaryMatrix, 0, mModelMatrix, 0, 16);
+    	
+    	// Set the active texture unit to texture unit 0.
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        
+        // Bind the texture to this unit.
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mBrickDataHandle);
+        
+        // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
+        GLES20.glUniform1i(mTextureUniformHandle, 0);
+        
+        // Pass in the texture coordinate information
+        mCubeTextureCoordinates.position(0);
+        GLES20.glVertexAttribPointer(mTextureCoordinateHandle, mTextureCoordinateDataSize, GLES20.GL_FLOAT, false, 
+        		0, mCubeTextureCoordinates);
+        
+        drawCube();  
+        
+        // Draw a plane
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, -2.0f, -5.0f);
+        Matrix.scaleM(mModelMatrix, 0, 25.0f, 1.0f, 25.0f);
+        Matrix.rotateM(mModelMatrix, 0, slowAngleInDegrees, 0.0f, 1.0f, 0.0f);
         
         // Set the active texture unit to texture unit 0.
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         
         // Bind the texture to this unit.
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureDataHandle);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mGrassDataHandle);
         
         // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
-        GLES20.glUniform1i(mTextureUniformHandle, 0);        
+        GLES20.glUniform1i(mTextureUniformHandle, 0);
         
-        // Calculate position of the light. Rotate and then push into the distance.
-        Matrix.setIdentityM(mLightModelMatrix, 0);
-        Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, -2.0f);      
-        Matrix.rotateM(mLightModelMatrix, 0, angleInDegrees, 0.0f, 0.0f, 1.0f);
-        Matrix.translateM(mLightModelMatrix, 0, 0.0f, 1.5f, 0.0f);
-               
-        Matrix.multiplyMV(mLightPosInWorldSpace, 0, mLightModelMatrix, 0, mLightPosInModelSpace, 0);
-        Matrix.multiplyMV(mLightPosInEyeSpace, 0, mViewMatrix, 0, mLightPosInWorldSpace, 0);                        
+        // Pass in the texture coordinate information
+        mCubeTextureCoordinatesForPlane.position(0);
+        GLES20.glVertexAttribPointer(mTextureCoordinateHandle, mTextureCoordinateDataSize, GLES20.GL_FLOAT, false, 
+        		0, mCubeTextureCoordinatesForPlane);
         
-        // Draw some cubes.        
-        Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -3.25f);
-        // Rotate as per user rotation
-        Matrix.rotateM(mModelMatrix, 0, mAngleX, 1.0f, 0.0f, 0.0f);
-        Matrix.rotateM(mModelMatrix, 0, mAngleY, 0.0f, 1.0f, 0.0f);
-        drawCube();                                    
+        GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
+        
+        drawCube();
         
         // Draw a point to indicate the light.
         GLES20.glUseProgram(mPointProgramHandle);        
@@ -435,13 +557,17 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 	
 	public void setMinFilter(final int filter)
 	{
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureDataHandle);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mBrickDataHandle);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, filter);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mGrassDataHandle);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, filter);
 	}
 	
 	public void setMagFilter(final int filter)
 	{
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureDataHandle);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mBrickDataHandle);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, filter);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mGrassDataHandle);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, filter);
 	}
 	
@@ -462,14 +588,7 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
         GLES20.glVertexAttribPointer(mNormalHandle, mNormalDataSize, GLES20.GL_FLOAT, false, 
         		0, mCubeNormals);
         
-        GLES20.glEnableVertexAttribArray(mNormalHandle);
-        
-        // Pass in the texture coordinate information
-        mCubeTextureCoordinates.position(0);
-        GLES20.glVertexAttribPointer(mTextureCoordinateHandle, mTextureCoordinateDataSize, GLES20.GL_FLOAT, false, 
-        		0, mCubeTextureCoordinates);
-        
-        GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
+        GLES20.glEnableVertexAttribArray(mNormalHandle);                
         
 		// This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
         // (which currently contains model * view).
@@ -479,8 +598,9 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
         GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mMVPMatrix, 0);                
         
         // This multiplies the modelview matrix by the projection matrix, and stores the result in the MVP matrix
-        // (which now contains model * view * projection).
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
+        // (which now contains model * view * projection).        
+        Matrix.multiplyMM(mTemporaryMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
+        System.arraycopy(mTemporaryMatrix, 0, mMVPMatrix, 0, 16);
 
         // Pass in the combined matrix.
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
@@ -490,7 +610,7 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
         
         // Draw the cube.
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);                               
-	}	
+	}			
 	
 	/**
 	 * Draws a point representing the position of the light.
@@ -508,7 +628,8 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 		
 		// Pass in the transformation matrix.
 		Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mLightModelMatrix, 0);
-		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
+		Matrix.multiplyMM(mTemporaryMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
+		System.arraycopy(mTemporaryMatrix, 0, mMVPMatrix, 0, 16);
 		GLES20.glUniformMatrix4fv(pointMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 		
 		// Draw the point.

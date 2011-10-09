@@ -21,7 +21,7 @@ void main()
     float diffuse = max(dot(v_Normal, lightVector), 0.0);               	  		  													  
 
 	// Add attenuation. 
-    diffuse = diffuse * (1.0 / (1.0 + (0.10 * distance)));
+    diffuse = diffuse * (1.0 / (1.0 + (0.25 * distance)));
     
     // Add ambient lighting
     diffuse = diffuse + 0.7;  
