@@ -38,8 +38,8 @@ public class LessonSixGLSurfaceView extends GLSurfaceView
 			{
 				if (mRenderer != null)
 				{
-					float deltaX = (x - mPreviousX) / mDensity;
-					float deltaY = (y - mPreviousY) / mDensity;
+					float deltaX = (x - mPreviousX) / mDensity / 2f;
+					float deltaY = (y - mPreviousY) / mDensity / 2f;
 					
 					mRenderer.mDeltaX += deltaX;
 					mRenderer.mDeltaY += deltaY;												

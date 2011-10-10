@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import com.learnopengles.android.R;
 
@@ -23,6 +24,12 @@ public class LessonSixActivity extends Activity
 	
 	private static final int MIN_DIALOG = 1;
 	private static final int MAG_DIALOG = 2;
+	
+	private int mMinSetting = -1;
+	private int mMagSetting = -1;
+	
+	private static final String MIN_SETTING = "min_setting";
+	private static final String MAG_SETTING = "mag_setting";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
@@ -74,6 +81,16 @@ public class LessonSixActivity extends Activity
 				showDialog(MAG_DIALOG);				
 			}
 		});
+		
+		// Restore previous settings
+		if (savedInstanceState != null)
+		{
+			mMinSetting = savedInstanceState.getInt(MIN_SETTING, -1);
+			mMagSetting = savedInstanceState.getInt(MAG_SETTING, -1);
+			
+			if (mMinSetting != -1) { setMinSetting(mMinSetting); }
+			if (mMagSetting != -1) { setMagSetting(mMagSetting); }
+		}
 	}
 
 	@Override
@@ -95,6 +112,79 @@ public class LessonSixActivity extends Activity
 	}
 	
 	@Override
+	protected void onSaveInstanceState (Bundle outState)
+	{
+		outState.putInt(MIN_SETTING, mMinSetting);
+		outState.putInt(MAG_SETTING, mMagSetting);
+	}
+	
+	private void setMinSetting(final int item)
+	{
+		mMinSetting = item;
+		
+		mGLSurfaceView.queueEvent(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				final int filter;
+				
+				if (item == 0)
+				{
+					filter = GLES20.GL_NEAREST;
+				}
+				else if (item == 1)
+				{
+					filter = GLES20.GL_LINEAR;
+				}
+				else if (item == 2)
+				{
+					filter = GLES20.GL_NEAREST_MIPMAP_NEAREST;
+				}
+				else if (item == 3)
+				{
+					filter = GLES20.GL_NEAREST_MIPMAP_LINEAR;
+				}
+				else if (item == 4)
+				{
+					filter = GLES20.GL_LINEAR_MIPMAP_NEAREST;
+				}
+				else // if (item == 5)
+				{
+					filter = GLES20.GL_LINEAR_MIPMAP_LINEAR;
+				}
+				
+				mRenderer.setMinFilter(filter);
+			}
+		});
+	}
+	
+	private void setMagSetting(final int item)
+	{
+		mMagSetting = item;
+		
+		mGLSurfaceView.queueEvent(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				final int filter;
+				
+				if (item == 0)
+				{
+					filter = GLES20.GL_NEAREST;
+				}
+				else // if (item == 1)
+				{
+					filter = GLES20.GL_LINEAR;
+				}	    						
+				
+				mRenderer.setMagFilter(filter);
+			}
+		});
+	}
+	
+	@Override
 	protected Dialog onCreateDialog(int id) 
 	{
 	    Dialog dialog = null;
@@ -110,41 +200,7 @@ public class LessonSixActivity extends Activity
 	    			@Override
 	    		    public void onClick(final DialogInterface dialog, final int item) 
 	    			{
-	    				mGLSurfaceView.queueEvent(new Runnable()
-	    				{
-	    					@Override
-	    					public void run()
-	    					{
-	    						final int filter;
-	    						
-	    						if (item == 0)
-	    						{
-	    							filter = GLES20.GL_NEAREST;
-	    						}
-	    						else if (item == 1)
-	    						{
-	    							filter = GLES20.GL_LINEAR;
-	    						}
-	    						else if (item == 2)
-	    						{
-	    							filter = GLES20.GL_NEAREST_MIPMAP_NEAREST;
-	    						}
-	    						else if (item == 3)
-	    						{
-	    							filter = GLES20.GL_NEAREST_MIPMAP_LINEAR;
-	    						}
-	    						else if (item == 4)
-	    						{
-	    							filter = GLES20.GL_LINEAR_MIPMAP_NEAREST;
-	    						}
-	    						else // if (item == 5)
-	    						{
-	    							filter = GLES20.GL_LINEAR_MIPMAP_LINEAR;
-	    						}
-	    						
-	    						mRenderer.setMinFilter(filter);
-	    					}
-	    				});
+	    				setMinSetting(item);
 	    		    }
 	    		});
 	    		
@@ -160,25 +216,7 @@ public class LessonSixActivity extends Activity
 	    			@Override
 	    		    public void onClick(final DialogInterface dialog, final int item) 
 	    			{
-	    				mGLSurfaceView.queueEvent(new Runnable()
-	    				{
-	    					@Override
-	    					public void run()
-	    					{
-	    						final int filter;
-	    						
-	    						if (item == 0)
-	    						{
-	    							filter = GLES20.GL_NEAREST;
-	    						}
-	    						else // if (item == 1)
-	    						{
-	    							filter = GLES20.GL_LINEAR;
-	    						}	    						
-	    						
-	    						mRenderer.setMagFilter(filter);
-	    					}
-	    				});
+	    				setMagSetting(item);
 	    		    }
 	    		});
 	    		
