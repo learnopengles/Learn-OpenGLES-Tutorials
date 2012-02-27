@@ -11,7 +11,6 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.os.Handler;
 import android.os.SystemClock;
 
 import com.learnopengles.android.R;

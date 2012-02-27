@@ -3,7 +3,6 @@ package com.learnopengles.android.lesson6;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.view.MotionEvent;
 
 public class LessonSixGLSurfaceView extends GLSurfaceView 
