@@ -2,7 +2,7 @@
 <manifest 
 	xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.learnopengles.android" 
-    android:versionCode="7" android:versionName="1.0.5">
+    android:versionCode="8" android:versionName="1.0.6">
     <uses-sdk 
     	android:minSdkVersion="8" />
  	<!-- We require OpenGL ES 2.0 -->
@@ -41,5 +41,8 @@
         <activity 
             android:label="@string/lesson_six" 
             android:name=".lesson6.LessonSixActivity"/>
+        <activity 
+            android:label="@string/lesson_seven" 
+            android:name=".lesson7.LessonSevenActivity"/>
     </application>      
 </manifest>
