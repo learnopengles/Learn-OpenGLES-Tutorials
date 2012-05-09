@@ -40,4 +40,8 @@
    	<string name="lesson_seven_not_using_VBOs">Not using VBOs</string>
    	<string name="lesson_seven_using_stride">Using stride</string>
    	<string name="lesson_seven_not_using_stride">Not using stride</string>
+   	<string name="lesson_eight">Lesson Eight: An Intro to IBOs</string>  
+    <string name="lesson_eight_subtitle">This lesson looks at index buffer objects (IBOs).</string>
+   	<string name="lesson_eight_error_could_not_create_vbo">Could not create vertex buffer object: %s</string>
+    <string name="lesson_eight_error_unknown">Unknown error: %s</string>
 </resources>

@@ -25,8 +25,6 @@ public class LessonSevenActivity extends Activity {
 
 		mGLSurfaceView = (LessonSevenGLSurfaceView) findViewById(R.id.gl_surface_view);
 
-		// We need the
-
 		// Check if the system supports OpenGL ES 2.0.
 		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();

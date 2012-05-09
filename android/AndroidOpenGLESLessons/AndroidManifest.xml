@@ -44,5 +44,8 @@
         <activity 
             android:label="@string/lesson_seven" 
             android:name=".lesson7.LessonSevenActivity"/>
+        <activity 
+            android:label="@string/lesson_eight" 
+            android:name=".lesson8.LessonEightActivity"/>
     </application>      
 </manifest>

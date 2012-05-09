@@ -21,6 +21,7 @@ import com.learnopengles.android.lesson4.LessonFourActivity;
 import com.learnopengles.android.lesson5.LessonFiveActivity;
 import com.learnopengles.android.lesson6.LessonSixActivity;
 import com.learnopengles.android.lesson7.LessonSevenActivity;
+import com.learnopengles.android.lesson8.LessonEightActivity;
 
 public class TableOfContents extends ListActivity 
 {
@@ -102,6 +103,15 @@ public class TableOfContents extends ListActivity
 			item.put(ITEM_SUBTITLE, getText(R.string.lesson_seven_subtitle));
 			data.add(item);
 			activityMapping.put(i++, LessonSevenActivity.class);
+		}
+		
+		{
+			final Map<String, Object> item = new HashMap<String, Object>();
+			item.put(ITEM_IMAGE, R.drawable.ic_lesson_eight);
+			item.put(ITEM_TITLE, getText(R.string.lesson_eight));
+			item.put(ITEM_SUBTITLE, getText(R.string.lesson_eight_subtitle));
+			data.add(item);
+			activityMapping.put(i++, LessonEightActivity.class);
 		}
 		
 		final SimpleAdapter dataAdapter = new SimpleAdapter(this, data, R.layout.toc_item, new String[] {ITEM_IMAGE, ITEM_TITLE, ITEM_SUBTITLE}, new int[] {R.id.Image, R.id.Title, R.id.SubTitle});
