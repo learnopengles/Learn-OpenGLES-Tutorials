@@ -316,7 +316,7 @@ public class LessonEightRenderer implements GLSurfaceView.Renderer {
 						final float xSlope = (2 * xPosition) / 10f;
 						final float ySlope = (2 * yPosition) / 10f;
 						
-						// Calculate the normal using the cross product of the slope.
+						// Calculate the normal using the cross product of the slopes.
 						final float[] planeVectorX = {1f, 0f, xSlope};
 						final float[] planeVectorY = {0f, 1f, ySlope};
 						final float[] normalVector = {
