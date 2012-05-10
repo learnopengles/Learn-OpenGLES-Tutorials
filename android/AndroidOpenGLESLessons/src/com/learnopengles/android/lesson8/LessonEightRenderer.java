@@ -309,13 +309,24 @@ public class LessonEightRenderer implements GLSurfaceView.Renderer {
 
 						// Cheap normal using a derivative of the function.
 						// The slope for X will be 2X, for Y will be 2Y.
-						final float xNormal = (-2 * xPosition) / 10f;
-						final float yNormal = (-2 * yPosition) / 10f;
-						final float length = Matrix.length(xNormal, yNormal, 1f);
+						// Divide by 10 since the position's Z is also divided by 10.
+						final float xSlope = (2 * xPosition) / 10f;
+						final float ySlope = (2 * yPosition) / 10f;
+						
+						// Calculate the normal using the cross product of the slope.
+						final float[] planeVectorX = {1f, 0f, xSlope};
+						final float[] planeVectorY = {0f, 1f, ySlope};
+						final float[] normalVector = {
+								(planeVectorX[1] * planeVectorY[2]) - (planeVectorX[2] * planeVectorY[1]),
+								(planeVectorX[2] * planeVectorY[0]) - (planeVectorX[0] * planeVectorY[2]),
+								(planeVectorX[0] * planeVectorY[1]) - (planeVectorX[1] * planeVectorY[0])};
+						
+						// Normalize the normal						
+						final float length = Matrix.length(normalVector[0], normalVector[1], normalVector[2]);
 
-						heightMapVertexData[offset++] = xNormal / length;
-						heightMapVertexData[offset++] = yNormal / length;
-						heightMapVertexData[offset++] = 1f / length;
+						heightMapVertexData[offset++] = normalVector[0] / length;
+						heightMapVertexData[offset++] = normalVector[1] / length;
+						heightMapVertexData[offset++] = normalVector[2] / length;
 
 						// Add some fancy colors.
 						heightMapVertexData[offset++] = xRatio;
