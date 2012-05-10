@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -38,7 +39,7 @@ public class TableOfContents extends ListActivity
 		
 		// Initialize data
 		final List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
-		final Map<Integer, Class<? extends Activity>> activityMapping = new HashMap<Integer, Class<? extends Activity>>();
+		final SparseArray<Class<? extends Activity>> activityMapping = new SparseArray<Class<? extends Activity>>();
 		
 		int i = 0;
 		
