@@ -298,7 +298,10 @@ public class LessonEightRenderer implements GLSurfaceView.Renderer {
 				for (int y = 0; y < yLength; y++) {
 					for (int x = 0; x < xLength; x++) {
 						final float xRatio = x / (float) (xLength - 1);
-						final float yRatio = y / (float) (yLength - 1);
+						
+						// Build our heightmap from top down, so that our triangles are counter-clockwise.
+						final float yRatio = 1f - (y / (float) (yLength - 1));
+						
 						final float xPosition = MIN_POSITION + (xRatio * POSITION_RANGE);
 						final float yPosition = MIN_POSITION + (yRatio * POSITION_RANGE);
 
