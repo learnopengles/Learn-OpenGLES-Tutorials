@@ -6,11 +6,6 @@ import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-
-import com.learnopengles.android.R;
 
 public class LessonEightActivity extends Activity {	
 	private LessonEightGLSurfaceView glSurfaceView;

@@ -391,8 +391,9 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
 		// Enable depth testing
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		
+		// The below glEnable() call is a holdover from OpenGL ES 1, and is not needed in OpenGL ES 2.
 		// Enable texture mapping
-		GLES20.glEnable(GLES20.GL_TEXTURE_2D);
+		// GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 			
 		// Position the eye in front of the origin.
 		final float eyeX = 0.0f;

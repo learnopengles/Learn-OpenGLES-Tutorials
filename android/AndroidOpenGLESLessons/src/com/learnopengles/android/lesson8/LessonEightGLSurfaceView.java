@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.learnopengles.android.R;
-import com.learnopengles.android.lesson8.ErrorHandler.ErrorType;
 
 public class LessonEightGLSurfaceView extends GLSurfaceView implements ErrorHandler
 {	
