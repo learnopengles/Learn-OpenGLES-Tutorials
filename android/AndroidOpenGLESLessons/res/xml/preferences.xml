@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <CheckBoxPreference
+        android:key="use_gl_surface_view"
+        android:title="Use GLSurfaceView"
+        android:defaultValue="true"/>
+</PreferenceScreen>

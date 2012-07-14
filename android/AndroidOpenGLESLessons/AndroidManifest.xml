@@ -76,6 +76,25 @@
                 android:name="android.service.wallpaper"
                 android:resource="@xml/wallpaper" />
         </service>
+        <service
+            android:name=".switchinglivewallpaper.LessonThreeWallpaperService"
+            android:label="@string/lesson_three_wallpaper_3"
+            android:permission="android.permission.BIND_WALLPAPER" >
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/switching_wallpaper" />
+        </service>
+        <activity
+            android:name=".switchinglivewallpaper.WallpaperSettings"
+            android:exported="true"
+            android:label="@string/lesson_three_wallpaper_3"
+            android:permission="android.permission.BIND_WALLPAPER"
+            android:theme="@style/WallpaperSettingsLight" >
+        </activity>
     </application>
 
 </manifest>

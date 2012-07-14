@@ -372,7 +372,7 @@ public class LessonSevenRenderer implements GLSurfaceView.Renderer {
 							mLessonSevenActivity.runOnUiThread(new Runnable() {							
 								@Override
 								public void run() {
-									Toast.makeText(mLessonSevenActivity, "Out of memory; Dalvik takes a while to clean up the memory. Please try again.\nExternal bytes allocated=" + dalvik.system.VMRuntime.getRuntime().getExternalBytesAllocated(), Toast.LENGTH_LONG).show();								
+//									Toast.makeText(mLessonSevenActivity, "Out of memory; Dalvik takes a while to clean up the memory. Please try again.\nExternal bytes allocated=" + dalvik.system.VMRuntime.getRuntime().getExternalBytesAllocated(), Toast.LENGTH_LONG).show();								
 								}
 							});										
 						}																	
@@ -385,7 +385,7 @@ public class LessonSevenRenderer implements GLSurfaceView.Renderer {
 				mLessonSevenActivity.runOnUiThread(new Runnable() {							
 					@Override
 					public void run() {
-						Toast.makeText(mLessonSevenActivity, "Out of memory; Dalvik takes a while to clean up the memory. Please try again.\nExternal bytes allocated=" + dalvik.system.VMRuntime.getRuntime().getExternalBytesAllocated(), Toast.LENGTH_LONG).show();								
+//						Toast.makeText(mLessonSevenActivity, "Out of memory; Dalvik takes a while to clean up the memory. Please try again.\nExternal bytes allocated=" + dalvik.system.VMRuntime.getRuntime().getExternalBytesAllocated(), Toast.LENGTH_LONG).show();								
 					}
 				});
 			}			
