@@ -9,6 +9,8 @@
     <string name="lesson_two_subtitle">Learn about ambient and diffuse lighting in this lesson.</string>
     <string name="lesson_three">Lesson Three: Adding Per-Pixel Lighting</string>  
     <string name="lesson_three_subtitle">This builds on lesson two by adding per-pixel lighting.</string>
+    <string name="lesson_three_wallpaper_1">Lesson 3: GLSurfaceView</string>
+    <string name="lesson_three_wallpaper_2">Lesson 3: Re-implementation of GLSurfaceView</string>
     <string name="lesson_four">Lesson Four: Basic Texturing</string>  
     <string name="lesson_four_subtitle">This builds on lesson three by adding basic texturing.</string>
     <string name="lesson_five">Lesson Five: An Intro to Blending</string>  
