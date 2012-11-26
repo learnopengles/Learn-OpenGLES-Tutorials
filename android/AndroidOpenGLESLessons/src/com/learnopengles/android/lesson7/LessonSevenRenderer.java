@@ -12,7 +12,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidGL20;
 import com.learnopengles.android.R;
