@@ -3,6 +3,7 @@ package com.learnopengles.android.livewallpaper;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Build;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -68,10 +69,8 @@ public abstract class GLWallpaperService extends WallpaperService {
 			if (rendererHasBeenSet) {
 				if (visible) {
 					glSurfaceView.onResume();
-				} else {
-					if (!isPreview()) {
-						glSurfaceView.onPause();
-					}
+				} else {					
+					glSurfaceView.onPause();														
 				}
 			}
 		}		
@@ -94,6 +93,16 @@ public abstract class GLWallpaperService extends WallpaperService {
 			glSurfaceView.setRenderer(renderer);
 			rendererHasBeenSet = true;
 		}
+		
+		protected void setPreserveEGLContextOnPause(boolean preserve) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				if (LoggerConfig.ON) {
+					Log.d(TAG, "setPreserveEGLContextOnPause(" + preserve + ")");
+				}
+	
+				glSurfaceView.setPreserveEGLContextOnPause(preserve);
+			}
+		}		
 
 		protected void setEGLContextClientVersion(int version) {
 			if (LoggerConfig.ON) {

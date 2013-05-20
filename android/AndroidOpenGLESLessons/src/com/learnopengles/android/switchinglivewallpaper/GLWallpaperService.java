@@ -89,10 +89,8 @@ public abstract class GLWallpaperService extends WallpaperService {
 			if (rendererHasBeenSet) {
 				if (visible) {
 					glSurfaceView.onResume();
-				} else {
-					if (!isPreview()) {
-						glSurfaceView.onPause();
-					}
+				} else {					
+					glSurfaceView.onPause();				
 				}
 			}
 		}		
