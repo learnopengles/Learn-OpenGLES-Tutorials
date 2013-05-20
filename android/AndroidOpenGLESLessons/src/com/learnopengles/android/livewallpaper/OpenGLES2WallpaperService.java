@@ -27,6 +27,10 @@ public abstract class OpenGLES2WallpaperService extends GLWallpaperService {
 			{
 				// Request an OpenGL ES 2.0 compatible context.
 				setEGLContextClientVersion(2);
+				
+				// On Honeycomb+ devices, this improves the performance when
+				// leaving and resuming the live wallpaper.
+				setPreserveEGLContextOnPause(true);
 
 				// Set the renderer to our user-defined renderer.
 				setRenderer(getNewRenderer());
