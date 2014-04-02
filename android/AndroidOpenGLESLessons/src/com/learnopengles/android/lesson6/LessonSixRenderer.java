@@ -538,6 +538,8 @@ public class LessonSixRenderer implements GLSurfaceView.Renderer
         mCubeTextureCoordinates.position(0);
         GLES20.glVertexAttribPointer(mTextureCoordinateHandle, mTextureCoordinateDataSize, GLES20.GL_FLOAT, false, 
         		0, mCubeTextureCoordinates);
+
+        GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
         
         drawCube();  
         
