@@ -1,2 +1,6 @@
 /gen
 /bin
+.idea/
+*.iml
+build/
+local.properties
