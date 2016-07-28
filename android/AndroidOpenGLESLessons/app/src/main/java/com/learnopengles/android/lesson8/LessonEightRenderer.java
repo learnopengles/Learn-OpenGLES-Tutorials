@@ -13,7 +13,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.badlogic.gdx.backends.android.AndroidGL20;
 import com.learnopengles.android.R;
 import com.learnopengles.android.common.RawResourceReader;
 import com.learnopengles.android.common.ShaderHelper;
@@ -31,12 +30,6 @@ public class LessonEightRenderer implements GLSurfaceView.Renderer {
 	/** References to other main objects. */
 	private final LessonEightActivity lessonEightActivity;
 	private final ErrorHandler errorHandler;
-
-	/**
-	 * Android's OpenGL bindings are broken until Gingerbread, so we use LibGDX
-	 * bindings here.
-	 */
-	private final AndroidGL20 glEs20;
 
 	/**
 	 * Store the model matrix. This matrix is used to move models from object
@@ -137,7 +130,6 @@ public class LessonEightRenderer implements GLSurfaceView.Renderer {
 	public LessonEightRenderer(final LessonEightActivity lessonEightActivity, ErrorHandler errorHandler) {
 		this.lessonEightActivity = lessonEightActivity;
 		this.errorHandler = errorHandler;
-		glEs20 = new AndroidGL20();
 	}
 
 	@Override
@@ -406,21 +398,21 @@ public class LessonEightRenderer implements GLSurfaceView.Renderer {
 				GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo[0]);
 
 				// Bind Attributes
-				glEs20.glVertexAttribPointer(positionAttribute, POSITION_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false,
+				GLES20.glVertexAttribPointer(positionAttribute, POSITION_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false,
 						STRIDE, 0);
 				GLES20.glEnableVertexAttribArray(positionAttribute);
 
-				glEs20.glVertexAttribPointer(normalAttribute, NORMAL_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false,
+				GLES20.glVertexAttribPointer(normalAttribute, NORMAL_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false,
 						STRIDE, POSITION_DATA_SIZE_IN_ELEMENTS * BYTES_PER_FLOAT);
 				GLES20.glEnableVertexAttribArray(normalAttribute);
 
-				glEs20.glVertexAttribPointer(colorAttribute, COLOR_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false,
+				GLES20.glVertexAttribPointer(colorAttribute, COLOR_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false,
 						STRIDE, (POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS) * BYTES_PER_FLOAT);
 				GLES20.glEnableVertexAttribArray(colorAttribute);
 
 				// Draw
 				GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, ibo[0]);
-				glEs20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, indexCount, GLES20.GL_UNSIGNED_SHORT, 0);
+				GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, indexCount, GLES20.GL_UNSIGNED_SHORT, 0);
 
 				GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 				GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);

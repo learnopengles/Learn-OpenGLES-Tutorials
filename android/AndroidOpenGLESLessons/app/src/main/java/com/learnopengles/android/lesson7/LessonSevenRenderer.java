@@ -13,7 +13,6 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
-import com.badlogic.gdx.backends.android.AndroidGL20;
 import com.learnopengles.android.R;
 import com.learnopengles.android.common.RawResourceReader;
 import com.learnopengles.android.common.ShaderHelper;
@@ -31,9 +30,6 @@ public class LessonSevenRenderer implements GLSurfaceView.Renderer {
 
 	private final LessonSevenActivity mLessonSevenActivity;
 	private final GLSurfaceView mGlSurfaceView;
-	
-	/** Android's OpenGL bindings are broken until Gingerbread, so we use LibGDX bindings here. */
-	private final AndroidGL20 mGlEs20;
 	
 	/**
 	 * Store the model matrix. This matrix is used to move models from object space (where each model can be thought
@@ -142,7 +138,6 @@ public class LessonSevenRenderer implements GLSurfaceView.Renderer {
 	public LessonSevenRenderer(final LessonSevenActivity lessonSevenActivity, final GLSurfaceView glSurfaceView) {
 		mLessonSevenActivity = lessonSevenActivity;	
 		mGlSurfaceView = glSurfaceView;
-		mGlEs20 = new AndroidGL20();
 	}
 
 	private void generateCubes(int cubeFactor, boolean toggleVbos, boolean toggleStride) {
@@ -762,17 +757,17 @@ public class LessonSevenRenderer implements GLSurfaceView.Renderer {
 			// Pass in the position information
 			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mCubePositionsBufferIdx);
 			GLES20.glEnableVertexAttribArray(mPositionHandle);
-			mGlEs20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, 0, 0);
+			GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, 0, 0);
 
 			// Pass in the normal information
 			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mCubeNormalsBufferIdx);
 			GLES20.glEnableVertexAttribArray(mNormalHandle);
-			mGlEs20.glVertexAttribPointer(mNormalHandle, NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, 0, 0);
+			GLES20.glVertexAttribPointer(mNormalHandle, NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, 0, 0);
 			
 			// Pass in the texture information
 			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mCubeTexCoordsBufferIdx);
 			GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
-			mGlEs20.glVertexAttribPointer(mTextureCoordinateHandle, TEXTURE_COORDINATE_DATA_SIZE, GLES20.GL_FLOAT, false,
+			GLES20.glVertexAttribPointer(mTextureCoordinateHandle, TEXTURE_COORDINATE_DATA_SIZE, GLES20.GL_FLOAT, false,
 					0, 0);
 
 			// Clear the currently bound buffer (so future OpenGL calls do not use this buffer).
@@ -819,17 +814,17 @@ public class LessonSevenRenderer implements GLSurfaceView.Renderer {
 			// Pass in the position information
 			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mCubeBufferIdx);
 			GLES20.glEnableVertexAttribArray(mPositionHandle);
-			mGlEs20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, 0);
+			GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, stride, 0);
 
 			// Pass in the normal information
 			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mCubeBufferIdx);
 			GLES20.glEnableVertexAttribArray(mNormalHandle);
-			mGlEs20.glVertexAttribPointer(mNormalHandle, NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, stride, POSITION_DATA_SIZE * BYTES_PER_FLOAT);
+			GLES20.glVertexAttribPointer(mNormalHandle, NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, stride, POSITION_DATA_SIZE * BYTES_PER_FLOAT);
 			
 			// Pass in the texture information
 			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mCubeBufferIdx);
 			GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
-			mGlEs20.glVertexAttribPointer(mTextureCoordinateHandle, TEXTURE_COORDINATE_DATA_SIZE, GLES20.GL_FLOAT, false,
+			GLES20.glVertexAttribPointer(mTextureCoordinateHandle, TEXTURE_COORDINATE_DATA_SIZE, GLES20.GL_FLOAT, false,
 					stride, (POSITION_DATA_SIZE + NORMAL_DATA_SIZE) * BYTES_PER_FLOAT);
 
 			// Clear the currently bound buffer (so future OpenGL calls do not use this buffer).
