@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.learnopengles.android"
+    android:versionCode="11"
+    android:versionName="1.0.8.1" >
+
+    <!-- We require OpenGL ES 2.0 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <application
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+
+        <!--
+               Don't override application title. See http://stackoverflow.com/questions/3462431/how-to-name-android-application
+              We will set this in code instead.
+        -->
+        <activity android:name="TableOfContents" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".lesson1.LessonOneActivity"
+            android:label="@string/lesson_one" />
+        <activity
+            android:name=".lesson2.LessonTwoActivity"
+            android:label="@string/lesson_two" />
+        <activity
+            android:name=".lesson3.LessonThreeActivity"
+            android:label="@string/lesson_three" />
+        <activity
+            android:name=".lesson4.LessonFourActivity"
+            android:label="@string/lesson_four" />
+        <activity
+            android:name=".lesson5.LessonFiveActivity"
+            android:label="@string/lesson_five" />
+        <activity
+            android:name=".lesson6.LessonSixActivity"
+            android:label="@string/lesson_six" />
+        <activity
+            android:name=".lesson7.LessonSevenActivity"
+            android:label="@string/lesson_seven" />
+        <activity
+            android:name=".lesson8.LessonEightActivity"
+            android:label="@string/lesson_eight" />
+
+        <service
+            android:name=".livewallpaper.LessonThreeWallpaperService"
+            android:label="@string/lesson_three_wallpaper_1"
+            android:permission="android.permission.BIND_WALLPAPER" >
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+        <service
+            android:name=".rbgrnlivewallpaper.LessonThreeWallpaperService"
+            android:label="@string/lesson_three_wallpaper_2"
+            android:permission="android.permission.BIND_WALLPAPER" >
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+        <service
+            android:name=".switchinglivewallpaper.LessonThreeWallpaperService"
+            android:label="@string/lesson_three_wallpaper_3"
+            android:permission="android.permission.BIND_WALLPAPER" >
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/switching_wallpaper" />
+        </service>
+        <activity
+            android:name=".switchinglivewallpaper.WallpaperSettings"
+            android:exported="true"
+            android:label="@string/lesson_three_wallpaper_3"
+            android:permission="android.permission.BIND_WALLPAPER"
+            android:theme="@style/WallpaperSettingsLight" >
+        </activity>
+    </application>
+
+</manifest>

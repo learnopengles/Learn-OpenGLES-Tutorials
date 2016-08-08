@@ -1,0 +1,31 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "24.0.0"
+
+    defaultConfig {
+        applicationId "com.learnopengles.android"
+        minSdkVersion 9
+        targetSdkVersion 23
+    }
+
+    signingConfigs {
+        release {
+            def STUB = "stub"
+            //these variables should be defined in ~/.gradle/gradle.properties file
+            storeFile file(project.hasProperty("RELEASE_STORE_FILE") ? RELEASE_STORE_FILE : STUB);
+            storePassword project.hasProperty("RELEASE_STORE_PASSWORD") ? RELEASE_STORE_PASSWORD : STUB;
+            keyAlias project.hasProperty("RELEASE_KEY_ALIAS") ? RELEASE_KEY_ALIAS : STUB;
+            keyPassword project.hasProperty("RELEASE_KEY_PASSWORD") ? RELEASE_KEY_PASSWORD : STUB;
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFile file("$rootProject.projectDir/proguard.cfg")
+            signingConfig signingConfigs.release
+        }
+    }
+}
