@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.learnopengles.android"
@@ -24,7 +24,6 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFile file("$rootProject.projectDir/proguard.cfg")
             signingConfig signingConfigs.release
         }
     }
