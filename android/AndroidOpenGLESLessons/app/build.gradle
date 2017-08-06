@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 25
@@ -23,8 +24,33 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            signingConfig signingConfigs.release
+            //minifyEnabled true
+            //signingConfig signingConfigs.release
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/build_main.kotlin_module' // will not include NOTICE file
+//    exclude 'META-INF/NOTICE' // will not include NOTICE file
+//    exclude 'META-INF/LICENSE' // will not include LICENSE file
+//    // as noted by @Vishnuvathsan you may also need to include
+//    // variations on the file name. It depends on your dependencies.
+//    // Some other common variations on notice and license file names
+//    exclude 'META-INF/notice'
+//    exclude 'META-INF/notice.txt'
+//    exclude 'META-INF/license'
+//    exclude 'META-INF/license.txt'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'com.github.kotlin-graphics:uno-sdk:cd7941c0f7'
 }
