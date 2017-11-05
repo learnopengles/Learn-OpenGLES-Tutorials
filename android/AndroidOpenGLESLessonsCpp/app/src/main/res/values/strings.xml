@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>    
+    <string name="app_name">Learn OpenGL ES Tutorials</string>
+    <string name="toc">Table of Contents</string>
+    <string name="tocHeader">Welcome to the Learn OpenGL ES tutorials! Please visit the website at: http://www.learnopengles.com/</string>
+    <string name="lesson_one">Lesson One: Getting Started</string>  
+    <string name="lesson_one_subtitle">This lesson shows the basics of drawing in OpenGL ES 2.</string>
+    <string name="lesson_two">Lesson Two: An Intro to Lighting</string>  
+    <string name="lesson_two_subtitle">Learn about ambient and diffuse lighting in this lesson.</string>
+    <string name="lesson_three">Lesson Three: Adding Per-Pixel Lighting</string>  
+    <string name="lesson_three_subtitle">This builds on lesson two by adding per-pixel lighting.</string>
+    <string name="lesson_three_wallpaper_1">Using GLSurfaceView</string>
+    <string name="lesson_three_wallpaper_2">Using re-implementation of GLSurfaceView</string>
+    <string name="lesson_three_wallpaper_3">Switching implementations</string>
+    <string name="lesson_four">Lesson Four: Basic Texturing</string>  
+    <string name="lesson_four_subtitle">This builds on lesson three by adding basic texturing.</string>
+    <string name="lesson_five">Lesson Five: An Intro to Blending</string>  
+    <string name="lesson_five_subtitle">This lesson takes a look at the basics of OpenGL blending.</string>
+    <string name="lesson_five_startup_toast">Tap the screen to switch between blended and normal mode.</string>
+    <string name="lesson_six">Lesson Six: Texture Filtering Modes</string>  
+    <string name="lesson_six_subtitle">This lesson looks at the different texture filtering modes available in OpenGL ES.</string>
+    <string name="lesson_six_set_min_filter">Set min. filter</string>
+    <string name="lesson_six_set_mag_filter">Set mag. filter</string>
+    <string name="lesson_six_set_min_filter_message">Set GL_TEXTURE_MIN_FILTER</string>
+    <string name="lesson_six_set_mag_filter_message">Set GL_TEXTURE_MAG_FILTER</string>
+    <string-array name="lesson_six_min_filter_types">
+    	<item>GL_NEAREST</item>
+    	<item>GL_LINEAR</item>
+    	<item>GL_NEAREST_MIPMAP_NEAREST</item>
+    	<item>GL_NEAREST_MIPMAP_LINEAR</item>
+    	<item>GL_LINEAR_MIPMAP_NEAREST</item>
+    	<item>GL_LINEAR_MIPMAP_LINEAR</item>
+    </string-array>
+    <string-array name="lesson_six_mag_filter_types">
+    	<item>GL_NEAREST</item>
+    	<item>GL_LINEAR</item>    	
+    </string-array>
+    <string name="lesson_seven">Lesson Seven: An Intro to VBOs</string>  
+    <string name="lesson_seven_subtitle">This lesson looks at vertex buffer objects (VBOs).</string>
+   	<string name="lesson_seven_increase_cube_count">Increase cube count</string>
+   	<string name="lesson_seven_decrease_cube_count">Decrease cube count</string>
+   	<string name="lesson_seven_using_VBOs">Using VBOs</string>
+   	<string name="lesson_seven_not_using_VBOs">Not using VBOs</string>
+   	<string name="lesson_seven_using_stride">Using stride</string>
+   	<string name="lesson_seven_not_using_stride">Not using stride</string>
+   	<string name="lesson_eight">Lesson Eight: An Intro to IBOs</string>  
+    <string name="lesson_eight_subtitle">This lesson looks at index buffer objects (IBOs).</string>
+   	<string name="lesson_eight_error_could_not_create_vbo">Could not create vertex buffer object: %s</string>
+    <string name="lesson_eight_error_unknown">Unknown error: %s</string>
+</resources>
