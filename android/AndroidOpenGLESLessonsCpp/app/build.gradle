@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+
+def platformVersion = 18    //openGLES 3 min Version
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "com.learnopengles.android"
+        minSdkVersion 9
+        targetSdkVersion 25
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions"
+                arguments "-DANDROID_PLATFORM_LEVEL=${platformVersion}",
+                        '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=gnustl_static'
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
