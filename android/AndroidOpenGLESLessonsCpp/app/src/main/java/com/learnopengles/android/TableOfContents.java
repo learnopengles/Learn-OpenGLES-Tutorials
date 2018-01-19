@@ -11,6 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter;
 
 import com.learnopengles.android.lesson1.LessonOneActivity;
+import com.learnopengles.android.lesson2.LessonTwoActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +42,15 @@ public class TableOfContents extends ListActivity {
             item.put(ITEM_SUBTITLE, getText(R.string.lesson_one_subtitle));
             data.add(item);
             activityMapping.put(i++, LessonOneActivity.class);
+        }
+
+        {
+            final Map<String, Object> item = new HashMap<String, Object>();
+            item.put(ITEM_IMAGE, R.drawable.ic_lesson_two);
+            item.put(ITEM_TITLE, getText(R.string.lesson_two));
+            item.put(ITEM_SUBTITLE, getText(R.string.lesson_two_subtitle));
+            data.add(item);
+            activityMapping.put(i++, LessonTwoActivity.class);
         }
 
         final SimpleAdapter dataAdapter = new SimpleAdapter(this, data, R.layout.toc_item, new String[]{ITEM_IMAGE, ITEM_TITLE, ITEM_SUBTITLE}, new int[]{R.id.Image, R.id.Title, R.id.SubTitle});

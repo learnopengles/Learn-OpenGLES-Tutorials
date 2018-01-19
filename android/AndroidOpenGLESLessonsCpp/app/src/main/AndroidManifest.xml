@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.learnopengles.android"
+          package="com.learnopengles.android.cpp"
           android:versionCode="1"
           android:versionName="1.0.0.0">
 
@@ -13,7 +13,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name">
 
-        <activity android:name="TableOfContents">
+        <activity android:name="com.learnopengles.android.TableOfContents">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -21,8 +21,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".lesson1.LessonOneActivity"
+            android:name="com.learnopengles.android.lesson1.LessonOneActivity"
             android:label="@string/lesson_one"/>
+        <activity
+            android:name="com.learnopengles.android.lesson2.LessonTwoActivity"
+            android:label="@string/lesson_two"/>
     </application>
 
 </manifest>
