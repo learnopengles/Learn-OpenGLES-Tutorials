@@ -38,6 +38,10 @@ add_library( # Sets the name of the library.
              # lesson3
              src/main/cpp/lesson3/Native3Lesson.cpp
              src/main/cpp/lesson3/Native3Lesson.h
+
+             # lesson4
+             src/main/cpp/lesson4/Native4Lesson.cpp
+             src/main/cpp/lesson4/Native4Lesson.h
              )
 
 include_directories(src/main/cpp/)

@@ -20,9 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.learnopengles.android.lesson1.LessonOneActivity"
             android:label="@string/lesson_one"/>
+
         <activity
             android:name="com.learnopengles.android.lesson2.LessonTwoActivity"
             android:label="@string/lesson_two"/>
@@ -30,6 +32,10 @@
         <activity
             android:name="com.learnopengles.android.lesson3.LessonThreeActivity"
             android:label="@string/lesson_three"/>
+
+        <activity
+            android:name="com.learnopengles.android.lesson4.LessonFourActivity"
+            android:label="@string/lesson_four"/>
     </application>
 
 </manifest>

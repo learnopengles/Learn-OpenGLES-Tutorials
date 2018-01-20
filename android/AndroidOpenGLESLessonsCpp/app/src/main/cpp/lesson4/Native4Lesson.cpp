@@ -3,8 +3,9 @@
 //
 
 #include <graphics/GLUtils.h>
-#include "Native3Lesson.h"
+#include "Native4Lesson.h"
 #include <android/log.h>
+#include <jni.h>
 
 #define LOG_TAG "Lesson"
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, fmt, ##args)
@@ -32,59 +33,6 @@ static const char *POINT_FRAGMENT_SHADER_CODE =
                 "   gl_FragColor = vec4(1.0,    \n"
                 "   1.0, 1.0, 1.0);             \n"
                 "}                              \n";
-
-static const char *VERTEX_SHADER_CODE =
-        "uniform mat4 u_MVPMatrix;      \n"        // A constant representing the combined model/view/projection matrix.
-                "uniform mat4 u_MVMatrix;       \n"        // A constant representing the combined model/view matrix.
-
-                "attribute vec4 a_Position;     \n"        // Per-vertex position information we will pass in.
-                "attribute vec4 a_Color;        \n"        // Per-vertex color information we will pass in.
-                "attribute vec3 a_Normal;       \n"        // Per-vertex normal information we will pass in.
-
-                "varying vec3 v_Position;       \n"        // This will be passed into the fragment shader.
-                "varying vec4 v_Color;          \n"        // This will be passed into the fragment shader.
-                "varying vec3 v_Normal;         \n"        // This will be passed into the fragment shader.
-
-                // The entry point for our vertex shader.
-                "void main()                                                \n"
-                "{                                                          \n"
-                // Transform the vertex into eye space.
-                "   v_Position = vec3(u_MVMatrix * a_Position);             \n"
-                // Pass through the color.
-                "   v_Color = a_Color;                                      \n"
-                // Transform the normal's orientation into eye space.
-                "   v_Normal = vec3(u_MVMatrix * vec4(a_Normal, 0.0));      \n"
-                // gl_Position is a special variable used to store the final position.
-                // Multiply the vertex by the matrix to get the final point in normalized screen coordinates.
-                "   gl_Position = u_MVPMatrix * a_Position;                 \n"
-                "}";
-
-static const char *FRAGMENT_SHADER_CODE =
-        "precision mediump float;       \n"        // Set the default precision to medium. We don't need as high of a
-                // precision in the fragment shader.
-                "uniform vec3 u_LightPos;       \n"        // The position of the light in eye space.
-
-                "varying vec3 v_Position;		\n"        // Interpolated position for this fragment.
-                "varying vec4 v_Color;          \n"        // This is the color from the vertex shader interpolated across the
-                // triangle per fragment.
-                "varying vec3 v_Normal;         \n"        // Interpolated normal for this fragment.
-
-                // The entry point for our fragment shader.
-                "void main()                    \n"
-                "{                              \n"
-                // Will be used for attenuation.
-                "   float distance = length(u_LightPos - v_Position);                  \n"
-                // Get a lighting direction vector from the light to the vertex.
-                "   vec3 lightVector = normalize(u_LightPos - v_Position);             \n"
-                // Calculate the dot product of the light vector and vertex normal. If the normal and light vector are
-                // pointing in the same direction then it will get max illumination.
-                "   float diffuse = max(dot(v_Normal, lightVector), 0.1);              \n"
-                // Add attenuation.
-                "   diffuse = diffuse * (1.0 / (1.0 + (0.25 * distance * distance)));  \n"
-                // Multiply the color by the diffuse illumination level to get final output color.
-                "   gl_FragColor = v_Color * diffuse;                                  \n"
-                "}                                                                     \n";
-
 
 const static GLfloat CUBE_POSITION_DATA[] = {
         // Front face
@@ -242,7 +190,66 @@ static const GLfloat CUBE_NORMAL_DATA[] = {
         0.0f, -1.0f, 0.0f
 };
 
-Native3Lesson::Native3Lesson() {
+/**
+     * S,T (X,Y)
+     * Texture coordinate data.
+     * Because images have a Y axis pointing downward,
+     * while OpenGL has a Y axis pointing upward, we adjust for
+     * that here by flipping the Y axis.
+     * What's more is that the texture coordinates are the same for every face.
+     */
+static const GLfloat CUBE_TEXTURE_COORDINATE_DATA[] =
+        {
+                // Front face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Right face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Back face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Left face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Top face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Bottom face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f
+        };
+
+Native4Lesson::Native4Lesson() {
     mWidth = 0;
     mHeight = 0;
 
@@ -278,7 +285,7 @@ Native3Lesson::Native3Lesson() {
     mLightPosInEyeSpace[3] = 0.0f;
 }
 
-Native3Lesson::~Native3Lesson() {
+Native4Lesson::~Native4Lesson() {
     delete mModelMatrix;
     mModelMatrix = NULL;
     delete mViewMatrix;
@@ -289,8 +296,8 @@ Native3Lesson::~Native3Lesson() {
     mLightModelMatrix = NULL;
 }
 
-void Native3Lesson::create() {
-    LOGD("Native3Lesson create");
+void Native4Lesson::create() {
+    LOGD("Native4Lesson create");
 
     // Use culling to remove back face.
     glEnable(GL_CULL_FACE);
@@ -298,8 +305,12 @@ void Native3Lesson::create() {
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
 
+    // Main Program
+    const char *vertex = GLUtils::openTextFile("vertex/per_pixel_vertex_shader.glsl");
+    const char *fragment = GLUtils::openTextFile("fragment/per_pixel_fragment_shader.glsl");
+
     // Set program handles
-    mPerVertexProgramHandle = GLUtils::createProgram(&VERTEX_SHADER_CODE, &FRAGMENT_SHADER_CODE);
+    mPerVertexProgramHandle = GLUtils::createProgram(&vertex, &fragment);
     if (!mPerVertexProgramHandle) {
         LOGD("Could not create program");
         return;
@@ -312,6 +323,8 @@ void Native3Lesson::create() {
         LOGD("Could not create program");
         return;
     }
+
+    mTextureDataHandle = GLUtils::loadTexture("texture/bumpy_bricks_public_domain.jpg");
 
     mLightModelMatrix = new Matrix();
     mModelMatrix = new Matrix();
@@ -336,7 +349,7 @@ void Native3Lesson::create() {
     mViewMatrix = Matrix::newLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
 }
 
-void Native3Lesson::change(int width, int height) {
+void Native4Lesson::change(int width, int height) {
 
     mWidth = width;
     mHeight = height;
@@ -356,7 +369,7 @@ void Native3Lesson::change(int width, int height) {
     mProjectionMatrix = Matrix::newFrustum(left, right, bottom, top, near, far);
 }
 
-void Native3Lesson::draw() {
+void Native4Lesson::draw() {
 // Set the OpenGL viewport to same size as the surface.
 
     glClearColor(0, 0, 0, 1);
@@ -377,6 +390,20 @@ void Native3Lesson::draw() {
     mPositionHandle = (GLuint) glGetAttribLocation(mPerVertexProgramHandle, "a_Position");
     mColorHandle = (GLuint) glGetAttribLocation(mPerVertexProgramHandle, "a_Color");
     mNormalHandle = (GLuint) glGetAttribLocation(mPerVertexProgramHandle, "a_Normal");
+    mTextureUniformHandle = (GLuint) glGetUniformLocation(mPerVertexProgramHandle, "u_Texture");
+    mTextureCoordinateHandle = (GLuint) glGetAttribLocation(mPerVertexProgramHandle,
+                                                            "a_TexCoordinate");
+
+    // Set the active texture unit to texture unit 0.
+    glActiveTexture(GL_TEXTURE0);
+
+    // Bind the texture to this unit
+    glBindTexture(GL_TEXTURE_2D, mTextureDataHandle);
+
+    // Tell the texture uniform sampler to use the texture
+    // in the shader by binding to texture unit 0.
+    glUniform1i(mTextureUniformHandle, 0);
+
 
     // Calculate position of the light
     // Rotate and then push into the distance.
@@ -423,7 +450,7 @@ void Native3Lesson::draw() {
     drawLight();
 }
 
-void Native3Lesson::drawCube() {
+void Native4Lesson::drawCube() {
 
     // Pass in the position info
     glVertexAttribPointer(
@@ -457,6 +484,18 @@ void Native3Lesson::drawCube() {
             CUBE_NORMAL_DATA
     );
     glEnableVertexAttribArray(mNormalHandle);
+
+    // Pass in the texture coordinate information
+    glVertexAttribPointer(
+            mTextureCoordinateHandle,
+            2,
+            GL_FLOAT,
+            GL_FALSE,
+            0,
+            CUBE_TEXTURE_COORDINATE_DATA
+    );
+    glEnableVertexAttribArray(mTextureCoordinateHandle);
+
 
     // This multiplies the view by the model matrix
     // and stores the result the MVP matrix.
@@ -495,7 +534,7 @@ void Native3Lesson::drawCube() {
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
-void Native3Lesson::drawLight() {
+void Native4Lesson::drawLight() {
 
     GLint pointMVPMatrixHandle = glGetUniformLocation(mPointProgramHandle, "u_MVPMatrix");
     GLint pointPositionHandle = glGetAttribLocation(mPointProgramHandle, "a_Position");
@@ -526,42 +565,43 @@ void Native3Lesson::drawLight() {
     glDrawArrays(GL_POINTS, 0, 1);
 }
 
+////////////////////////////
 
-//////////////////////
-
-
-Native3Lesson *lesson3;
+Native4Lesson *lesson4;
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_learnopengles_android_lesson3_LessonThreeNativeRenderer_nativeSurfaceCreate(JNIEnv *env,
-                                                                                     jclass type) {
-
-    if (lesson3) {
-        delete lesson3;
-        lesson3 = NULL;
+Java_com_learnopengles_android_lesson4_LessonFourNativeRenderer_nativeSurfaceCreate(JNIEnv *env,
+                                                                                    jclass type,
+                                                                                    jobject assetManager) {
+    GLUtils::setEnvAndAssetManager(env, assetManager);
+    if (lesson4) {
+        delete lesson4;
+        lesson4 = NULL;
     }
-    lesson3 = new Native3Lesson();
-    lesson3->create();
+    lesson4 = new Native4Lesson();
+    lesson4->create();
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_learnopengles_android_lesson3_LessonThreeNativeRenderer_nativeSurfaceChange(JNIEnv *env,
-                                                                                     jclass type,
-                                                                                     jint width,
-                                                                                     jint height) {
-    if (lesson3) {
-        lesson3->change(width, height);
+Java_com_learnopengles_android_lesson4_LessonFourNativeRenderer_nativeSurfaceChange(JNIEnv *env,
+                                                                                    jclass type,
+                                                                                    jint width,
+                                                                                    jint height) {
+    if (lesson4) {
+        lesson4->change(width, height);
     }
+
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_learnopengles_android_lesson3_LessonThreeNativeRenderer_nativeDrawFrame(JNIEnv *env,
-                                                                                 jclass type) {
+Java_com_learnopengles_android_lesson4_LessonFourNativeRenderer_nativeDrawFrame(JNIEnv *env,
+                                                                                jclass type) {
 
-    if (lesson3) {
-        lesson3->draw();
+    if (lesson4) {
+        lesson4->draw();
     }
+
 }

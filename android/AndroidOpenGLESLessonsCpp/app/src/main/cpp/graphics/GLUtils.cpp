@@ -97,7 +97,7 @@ long GLUtils::currentTimeMillis() {
 
 GLuint GLUtils::loadTexture(const char *path) {
     GLuint textureId = 0;
-    jclass utilsClass = sEnv->FindClass("com/bzh/gl/Utils");
+    jclass utilsClass = sEnv->FindClass("com/learnopengles/android/Utils");
     if (utilsClass == NULL) {
         LOGE("Couldn't find utils class");
         return (GLuint) -1;
