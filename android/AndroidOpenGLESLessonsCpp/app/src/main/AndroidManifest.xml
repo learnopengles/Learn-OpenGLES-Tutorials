@@ -26,6 +26,10 @@
         <activity
             android:name="com.learnopengles.android.lesson2.LessonTwoActivity"
             android:label="@string/lesson_two"/>
+
+        <activity
+            android:name="com.learnopengles.android.lesson3.LessonThreeActivity"
+            android:label="@string/lesson_three"/>
     </application>
 
 </manifest>
