@@ -14,42 +14,59 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-rtti -fno-exceptions -Wall")
 
 
-add_library( # Sets the name of the library.
-             lesson-lib
+add_library(
+                # Sets the name of the library.
+                lesson-lib
 
-             # Sets the library as a shared library.
-             SHARED
+                # Sets the library as a shared library.
+                SHARED
 
-             # graphics
-             src/main/cpp/graphics/GLUtils.h
-             src/main/cpp/graphics/GLUtils.cpp
-             src/main/cpp/graphics/Matrix.h
-             src/main/cpp/graphics/Matrix.cpp
+                # graphics
+                src/main/cpp/graphics/GLUtils.h
+                src/main/cpp/graphics/GLUtils.cpp
+                src/main/cpp/graphics/Matrix.h
+                src/main/cpp/graphics/Matrix.cpp
 
-             # Provides a relative path to your source file(s).
-             # lesson1
-             src/main/cpp/lesson1/Native1Lesson.cpp
-             src/main/cpp/lesson1/Native1Lesson.h
+                # Provides a relative path to your source file(s).
+                # lesson1
+                src/main/cpp/lesson1/Native1Lesson.cpp
+                src/main/cpp/lesson1/Native1Lesson.h
 
-             # lesson2
-             src/main/cpp/lesson2/Native2Lesson.cpp
-             src/main/cpp/lesson2/Native2Lesson.h
+                # lesson2
+                src/main/cpp/lesson2/Native2Lesson.cpp
+                src/main/cpp/lesson2/Native2Lesson.h
 
-             # lesson3
-             src/main/cpp/lesson3/Native3Lesson.cpp
-             src/main/cpp/lesson3/Native3Lesson.h
+                # lesson3
+                src/main/cpp/lesson3/Native3Lesson.cpp
+                src/main/cpp/lesson3/Native3Lesson.h
 
-             # lesson4
-             src/main/cpp/lesson4/Native4Lesson.cpp
-             src/main/cpp/lesson4/Native4Lesson.h
+                # lesson4
+                src/main/cpp/lesson4/Native4Lesson.cpp
+                src/main/cpp/lesson4/Native4Lesson.h
 
-             # lesson5
-             src/main/cpp/lesson5/Native5Lesson.cpp
-             src/main/cpp/lesson5/Native5Lesson.h
+                # lesson5
+                src/main/cpp/lesson5/Native5Lesson.cpp
+                src/main/cpp/lesson5/Native5Lesson.h
 
-             # lesson6
-             src/main/cpp/lesson6/Native6Lesson.cpp
-             src/main/cpp/lesson6/Native6Lesson.h
+                # lesson6
+                src/main/cpp/lesson6/Native6Lesson.cpp
+                src/main/cpp/lesson6/Native6Lesson.h
+
+                # lesson7
+                src/main/cpp/lesson7/Native7Lesson.cpp
+                src/main/cpp/lesson7/Native7Lesson.h
+                src/main/cpp/lesson7/Cubes.cpp
+                src/main/cpp/lesson7/Cubes.h
+                src/main/cpp/lesson7/CubesClientSide.cpp
+                src/main/cpp/lesson7/CubesClientSide.h
+                src/main/cpp/lesson7/CubesClientSideWithStride.cpp
+                src/main/cpp/lesson7/CubesClientSideWithStride.h
+                src/main/cpp/lesson7/CubesWithVbo.cpp
+                src/main/cpp/lesson7/CubesWithVbo.h
+                src/main/cpp/lesson7/CubesWithVboWithStride.cpp
+                src/main/cpp/lesson7/CubesWithVboWithStride.h
+                src/main/cpp/lesson7/GenData.cpp
+                src/main/cpp/lesson7/GenData.h
              )
 
 include_directories(src/main/cpp/)
