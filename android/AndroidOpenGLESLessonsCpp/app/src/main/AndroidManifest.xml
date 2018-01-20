@@ -47,7 +47,12 @@
 
         <activity
             android:name="com.learnopengles.android.lesson7.LessonSevenActivity"
-            android:label="@string/lesson_seven" />
+            android:label="@string/lesson_seven"/>
+
+        <activity
+            android:name="com.learnopengles.android.lesson8.LessonEightActivity"
+            android:label="@string/lesson_eight"/>
+
     </application>
 
 </manifest>

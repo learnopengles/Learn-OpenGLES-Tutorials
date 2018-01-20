@@ -67,6 +67,12 @@ add_library(
                 src/main/cpp/lesson7/CubesWithVboWithStride.h
                 src/main/cpp/lesson7/GenData.cpp
                 src/main/cpp/lesson7/GenData.h
+
+                # lesson8
+                src/main/cpp/lesson8/Native8Lesson.cpp
+                src/main/cpp/lesson8/Native8Lesson.h
+                src/main/cpp/lesson8/HeightMap.cpp
+                src/main/cpp/lesson8/HeightMap.h
              )
 
 include_directories(src/main/cpp/)

@@ -344,3 +344,7 @@ void mx4transform(float x, float y, float z, float w, const float *pM, float *pD
 void Matrix::multiplyMV(float *r, const float *lhs, const float *rhs) {
     mx4transform(rhs[0], rhs[1], rhs[2], rhs[3], lhs, r);
 }
+
+float Matrix::length(float x, float y, float z) {
+    return (float) sqrt(x * x + y * y + z * z);
+}
