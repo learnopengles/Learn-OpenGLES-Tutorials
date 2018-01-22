@@ -1,13 +1,11 @@
-package com.learnopengles.android.lesson1;
+package com.learnopengles.android.lesson3;
 
-import android.annotation.TargetApi;
 import android.opengl.GLSurfaceView;
-import android.os.Build;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class LessonOneNativeRenderer implements GLSurfaceView.Renderer {
+public class LessonThreeNativeRenderer implements GLSurfaceView.Renderer {
 
     static {
         System.loadLibrary("lesson-lib");
@@ -18,6 +16,7 @@ public class LessonOneNativeRenderer implements GLSurfaceView.Renderer {
     public static native void nativeSurfaceChange(int width, int height);
 
     public static native void nativeDrawFrame();
+
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {

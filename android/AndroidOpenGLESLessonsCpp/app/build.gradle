@@ -3,13 +3,12 @@ apply plugin: 'com.android.application'
 def platformVersion = 18    //openGLES 3 min Version
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
 
     defaultConfig {
-        applicationId "com.learnopengles.android"
-        minSdkVersion 9
-        targetSdkVersion 25
+        applicationId "com.learnopengles.android.cpp"
+        minSdkVersion 21
+        targetSdkVersion 27
 
         externalNativeBuild {
             cmake {
@@ -25,4 +24,9 @@ android {
             path "CMakeLists.txt"
         }
     }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.0.2'
 }

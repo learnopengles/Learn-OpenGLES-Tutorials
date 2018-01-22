@@ -1,27 +1,36 @@
-package com.learnopengles.android.lesson1;
+package com.learnopengles.android.lesson5;
 
-import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
-import android.os.Build;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class LessonOneNativeRenderer implements GLSurfaceView.Renderer {
+public class LessonFiveNativeRenderer implements GLSurfaceView.Renderer, BlendingMode {
+
+    private Activity mActivity;
+
+    public LessonFiveNativeRenderer(Activity activity) {
+        mActivity = activity;
+    }
 
     static {
         System.loadLibrary("lesson-lib");
     }
 
-    public static native void nativeSurfaceCreate();
+    public static native void nativeSurfaceCreate(AssetManager assetManager);
 
     public static native void nativeSurfaceChange(int width, int height);
 
     public static native void nativeDrawFrame();
 
+    public static native void nativeSwitchMode();
+
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        nativeSurfaceCreate();
+        nativeSurfaceCreate(mActivity.getAssets());
     }
 
     @Override
@@ -32,5 +41,10 @@ public class LessonOneNativeRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         nativeDrawFrame();
+    }
+
+    @Override
+    public void switchMode() {
+        nativeSwitchMode();
     }
 }

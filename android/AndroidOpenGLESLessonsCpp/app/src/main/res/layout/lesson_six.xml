@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"	
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<com.learnopengles.android.lesson6.LessonSixGLSurfaceView
+		android:id="@+id/gl_surface_view"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+	<LinearLayout		
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|center_horizontal"
+		android:orientation="horizontal">
+		<Button
+			android:id="@+id/button_set_min_filter"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"					
+			android:text="@string/lesson_six_set_min_filter" />
+		<Button
+			android:id="@+id/button_set_mag_filter"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"					
+			android:text="@string/lesson_six_set_mag_filter" />	
+	</LinearLayout>
+
+</FrameLayout>
