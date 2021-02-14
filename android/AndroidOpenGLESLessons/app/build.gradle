@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.learnopengles.android"
         minSdkVersion 9
-        targetSdkVersion 25
+        targetSdkVersion 26
     }
 
     signingConfigs {
